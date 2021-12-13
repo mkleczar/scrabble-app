@@ -1,22 +1,15 @@
 import { Injectable, NgZone } from "@angular/core";
 import { Observable } from "rxjs";
+
 @Injectable({
   providedIn: "root"
 })
-
 export class SseService {
 
   constructor(private _zone: NgZone) {
   }
 
-  private getWordsUrl = "http://localhost:8080/dict";
-
-
-  getServerSentEvent(): Observable<any> {
-
-    console.log("CALL FOR OBSERVER")
-    const letters = "kamien";
-    const url = `${this.getWordsUrl}/letters/${letters}`;
+  getServerSentEvent(url: string): Observable<any> {
     return new Observable(observer => {
       const eventSource = SseService.getEventSource(url);
       eventSource.onmessage = event => {

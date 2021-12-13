@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { DictionaryService} from "./service/dictionary.service";
-import {take, tap} from "rxjs";
-import {SseService} from "./service/sse.service";
 
 @Component({
   selector: 'app-root',
@@ -11,37 +9,55 @@ import {SseService} from "./service/sse.service";
 export class AppComponent {
   title = 'scrabble-app';
 
-  words: String = "";
-  info: String = "init";
-  array: String[] = [];
+  letters: string = "";
+  map: Map<number, string[]> = AppComponent.initMap();
 
-  constructor(private dictionaryService: DictionaryService,
-              private sseService: SseService) {
+  constructor(private dictionaryService: DictionaryService) {
   }
 
   ngOnInit(): void {
-    this.array.push("i psa");
-    this.test();
-    this.getWords("kamien");
+    // this.test();
+    this.letters = "peruka";
+    this.getWords(this.letters);
   }
 
-  getWords(letters: String):void {
-    this.words = "";
-    this.sseService.getServerSentEvent()
+  getWords(letters: string):void {
+    this.map = AppComponent.initMap();
+    this.dictionaryService.getWords(letters)
       .subscribe(w => {
-        this.words = this.words + " " + w.data;
-        this.array.push(w.data);
-        this.array = this.array.slice();
-        console.log("Element: ", w.data);
-        console.log("All:", this.array);
+        console.log("Element: ", w);
+        this.addToMap(w.data);
+        /*
+        for (let entry of this.map.entries()) {
+          console.log(entry[0], entry[1]);
+        }
+        */
       }
     );
   }
 
   test():void {
     this.dictionaryService.test().subscribe(w => {
-      this.info = w.value;
       console.log("Element: ", w);
     });
+  }
+
+  private addToMap(w:string):void {
+    let arr = this.map.get(w.length);
+    // @ts-ignore
+    this.map.set(w.length, arr.concat(w));
+  }
+
+  private static initMap():Map<number,string[]> {
+   return new Map([
+      [0, []],
+      [1, []],
+      [2, []],
+      [3, []],
+      [4, []],
+      [5, []],
+      [6, []],
+      [7, []]
+    ]);
   }
 }

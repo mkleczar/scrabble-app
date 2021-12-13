@@ -1,10 +1,11 @@
 <h1>Słownik Scrabble</h1>
-{{info}}
-
-{{array}}
 
 <router-outlet></router-outlet>
-<h2>Words</h2>
-{{words}}
 
+<h2>Słowa dla liter: {{letters}}</h2>
 
+<ul>
+  <li *ngFor=" let i of [2,3,4,5,6,7]">
+    {{i}} - {{map.get(i)}}
+  </li>
+</ul>

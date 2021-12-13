@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import {Observable, of, take, tap} from "rxjs";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {Observable} from "rxjs";
+import {SseService} from "./sse.service";
 
 @Injectable({
   providedIn: 'root'
@@ -9,19 +9,15 @@ export class DictionaryService {
 
   private getWordsUrl = "http://localhost:8080/dict";
 
-  httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-  };
-
-  constructor(private http:HttpClient) { }
+  constructor(private sseService:SseService) { }
 
   test():Observable<any> {
     const url = `${this.getWordsUrl}/test`;
-    return this.http.get(url);
+    return this.sseService.getServerSentEvent(url);
   }
 
-  getWords(letters:String):Observable<any[]> {
+  getWords(letters:String):Observable<any> {
     const url = `${this.getWordsUrl}/letters/${letters}`;
-    return this.http.get<any[]>(url);
+    return this.sseService.getServerSentEvent(url);
   }
 }
