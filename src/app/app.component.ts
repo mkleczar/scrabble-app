@@ -25,8 +25,6 @@ export class AppComponent {
   }
 
   startSearch():void {
-    // this.test();
-    //this.letters = "peruka";
     console.log("Start serarch for: " + this.letters);
     this.applicationMode = "WORDS_FROM_LETTERS";
     this.getWords(this.letters);
@@ -76,7 +74,11 @@ export class AppComponent {
       [4, []],
       [5, []],
       [6, []],
-      [7, []]
+      [7, []],
+      [8, []],
+      [9, []],
+      [10, []],
+
     ]);
   }
 }
