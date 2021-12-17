@@ -19,10 +19,14 @@ export class SseService {
       };
       eventSource.onerror = error => {
         this._zone.run(() => {
-          observer.error(error);
+          observer.complete();
+          //observer.error(error);
         });
       };
-      return () => eventSource.close();
+      return () => {
+        eventSource.close();
+        observer.complete();
+      }
     });
   }
   private static getEventSource(url: string): EventSource {

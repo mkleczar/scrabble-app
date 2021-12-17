@@ -9,6 +9,7 @@ import { DictionaryService} from "./service/dictionary.service";
 export class AppComponent {
   title = 'scrabble-app';
 
+  state: string ="";
   letters: string = "";
   map: Map<number, string[]> = AppComponent.initMap();
 
@@ -23,17 +24,25 @@ export class AppComponent {
 
   getWords(letters: string):void {
     this.map = AppComponent.initMap();
+    this.state = "szukam...";
     this.dictionaryService.getWords(letters)
-      .subscribe(w => {
-        console.log("Element: ", w);
-        this.addToMap(w.data);
-        /*
-        for (let entry of this.map.entries()) {
-          console.log(entry[0], entry[1]);
+      .subscribe({
+          next: w => {
+            console.log("Element: ", w);
+            this.addToMap(w.data);
+            /*
+            for (let entry of this.map.entries()) {
+              console.log(entry[0], entry[1]);
+            }
+            */
+          },
+          complete: () => {
+            console.log("complete");
+            this.state = "gotowe";
+          },
+          error: err => console.log("error")
         }
-        */
-      }
-    );
+      );
   }
 
   test():void {
@@ -49,7 +58,7 @@ export class AppComponent {
   }
 
   private static initMap():Map<number,string[]> {
-   return new Map([
+    return new Map([
       [0, []],
       [1, []],
       [2, []],
