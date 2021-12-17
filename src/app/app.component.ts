@@ -9,7 +9,8 @@ import { DictionaryService} from "./service/dictionary.service";
 export class AppComponent {
   title = 'scrabble-app';
 
-  state: string ="";
+  applicationMode = "";
+  isWorking: boolean = false;
   letters: string = "";
   map: Map<number, string[]> = AppComponent.initMap();
 
@@ -17,14 +18,23 @@ export class AppComponent {
   }
 
   ngOnInit(): void {
+  }
+
+  searchingWordsFromLetters():boolean {
+    return this.applicationMode == "WORDS_FROM_LETTERS";
+  }
+
+  startSearch():void {
     // this.test();
-    this.letters = "peruka";
+    //this.letters = "peruka";
+    console.log("Start serarch for: " + this.letters);
+    this.applicationMode = "WORDS_FROM_LETTERS";
     this.getWords(this.letters);
   }
 
   getWords(letters: string):void {
     this.map = AppComponent.initMap();
-    this.state = "szukam...";
+    this.isWorking = true;
     this.dictionaryService.getWords(letters)
       .subscribe({
           next: w => {
@@ -38,7 +48,7 @@ export class AppComponent {
           },
           complete: () => {
             console.log("complete");
-            this.state = "gotowe";
+            this.isWorking = false;
           },
           error: err => console.log("error")
         }

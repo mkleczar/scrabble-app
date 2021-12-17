@@ -2,13 +2,21 @@
 
 <router-outlet></router-outlet>
 
-<h2>Słowa dla liter: {{letters}}</h2>
-<p>Status: {{state}}</p>
+<input [(ngModel)]="letters" name="letters">
+<button (click)="startSearch()">Szukaj</button>
 
-<ul>
-  <div *ngFor=" let i of [2,3,4,5,6,7]">
-    <li [hidden]="map.get(i)!.length == 0">
-      {{i}} - {{map.get(i)}}
-    </li>
+<div [hidden]="!searchingWordsFromLetters()">
+  <h2>Słowa dla liter: {{letters}}</h2>
+
+  <div [hidden]="!isWorking">
+    <p>Trwa wyszukiwanie</p>
   </div>
-</ul>
+
+  <ul>
+    <div *ngFor=" let i of [2,3,4,5,6,7]">
+      <li [hidden]="map.get(i)!.length == 0">
+        {{i}} - {{map.get(i)}}
+      </li>
+    </div>
+  </ul>
+</div>
